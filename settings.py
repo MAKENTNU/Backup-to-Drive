@@ -6,3 +6,9 @@ TOKEN_FILENAME = 'token.json'
 CREDENTIALS_FILENAME = 'credentials.json'
 
 BACKUP_TEAM_DRIVE_FOLDER_ID = 'xxxxxxxxxxxxxxxxxxx'
+
+# Set local settings
+try:
+    from local_settings import *
+except ImportError:
+    pass
