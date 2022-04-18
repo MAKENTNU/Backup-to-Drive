@@ -1,11 +1,11 @@
 import mimetypes
 import sys
 from datetime import datetime
+from json import JSONDecodeError
 from pathlib import Path
 from sys import argv, exit
 
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
@@ -24,19 +24,15 @@ original_name = argv[1]
 backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
 mimetype, _encoding = mimetypes.guess_type(backup_name)
 
-# Code based on https://developers.google.com/drive/api/quickstart/python#step_2_configure_the_sample
+# Code based on https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests
 creds = None
-if Path(settings.TOKEN_FILENAME).exists():
-    creds = Credentials.from_authorized_user_file(settings.TOKEN_FILENAME, settings.GOOGLE_API_SCOPES)
-if not creds or not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-    else:
-        logger.error("Must obtain new token. Please run 'obtain_new_token.py' manually.")
-        exit(1)
-    # Save the credentials for the next run
-    with open('token.json', 'w') as token:
-        token.write(creds.to_json())
+try:
+    creds = service_account.Credentials.from_service_account_file(settings.CREDENTIALS_FILENAME, scopes=settings.GOOGLE_API_SCOPES)
+except (FileNotFoundError, JSONDecodeError, ValueError) as e:
+    logger.exception(f"Error while parsing credentials from '{settings.CREDENTIALS_FILENAME}'.", exc_info=e)
+    logger.error("Please use the following guide on creating service account credentials/keys:"
+                 " https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount")
+    exit(1)
 
 service = build('drive', 'v3', credentials=creds)
 
