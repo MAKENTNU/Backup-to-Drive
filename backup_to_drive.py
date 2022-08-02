@@ -18,7 +18,6 @@ if len(argv) != 2:
     logger.error(f"Usage: {python_command} backup_to_drive.py <filename>")
     exit(1)
 
-file_type_dot = argv[1].rfind(".")
 original_name = argv[1]
 
 backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
