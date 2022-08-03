@@ -5,7 +5,7 @@ GOOGLE_API_SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
 CREDENTIALS_FILENAME = 'credentials.json'
 
-BACKUP_TEAM_DRIVE_FOLDER_ID = 'xxxxxxxxxxxxxxxxxxx'
+DRIVE_BACKUP_FOLDER_ID = 'xxxxxxxxxxxxxxxxxxx'
 
 LOG_CONFIG = {
     'version': 1,

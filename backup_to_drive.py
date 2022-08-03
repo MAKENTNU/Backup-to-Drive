@@ -13,6 +13,7 @@ import settings
 from util.logging_utils import logger
 
 
+# --- Parse command line arguments ---
 if len(argv) != 2:
     python_command = Path(sys.executable).name if sys.executable else "<Python command>"
     logger.error(f"Usage: {python_command} backup_to_drive.py <filename>")
@@ -20,9 +21,11 @@ if len(argv) != 2:
 
 original_name = argv[1]
 
+# --- Initialize some variables ---
 backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
 mimetype, _encoding = mimetypes.guess_type(backup_name)
 
+# --- Create credentials ---
 # Code based on https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests
 creds = None
 try:
@@ -35,15 +38,16 @@ except (FileNotFoundError, JSONDecodeError, ValueError) as e:
 
 service = build('drive', 'v3', credentials=creds)
 
+# --- Upload the file ---
 logger.info(f"Uploading '{original_name}' to Drive with the filename '{backup_name}'")
 # Code based on https://developers.google.com/drive/api/guides/folder#create_a_file_in_a_folder
 media = MediaFileUpload(original_name, mimetype=mimetype)
 service.files().create(
-    supportsTeamDrives=True,
-    media_body=media,
     body={
-        "parents": [settings.BACKUP_TEAM_DRIVE_FOLDER_ID],
-        "name": backup_name,
-    }
+        'parents': [settings.DRIVE_BACKUP_FOLDER_ID],
+        'name': backup_name,
+    },
+    media_body=media,
+    supportsAllDrives=True,
 ).execute()
 logger.info("Backup finished.")
