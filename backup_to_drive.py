@@ -1,4 +1,5 @@
 import mimetypes
+import socket
 import sys
 from datetime import datetime
 from json import JSONDecodeError
@@ -24,6 +25,8 @@ original_name = argv[1]
 # --- Initialize some variables ---
 backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
 mimetype, _encoding = mimetypes.guess_type(backup_name)
+
+socket.setdefaulttimeout(settings.SOCKET_DEFAULT_TIMEOUT)
 
 # --- Create credentials ---
 # Code based on https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests

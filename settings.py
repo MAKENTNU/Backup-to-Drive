@@ -7,6 +7,8 @@ CREDENTIALS_FILENAME = 'credentials.json'
 
 DRIVE_BACKUP_FOLDER_ID = 'xxxxxxxxxxxxxxxxxxx'
 
+SOCKET_DEFAULT_TIMEOUT = 5 * 60
+
 LOG_CONFIG = {
     'version': 1,
     'formatters': {
