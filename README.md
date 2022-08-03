@@ -13,3 +13,4 @@ python backup_to_drive.py <filename>
 
 #### Options:
 * `-i <Google Drive folder ID>` - defaults to `DRIVE_BACKUP_FOLDER_ID`
+* `-p` (no <u>p</u>refix) - prevents prefixing a timestamped string to the uploaded file's name

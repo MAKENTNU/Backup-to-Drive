@@ -19,13 +19,19 @@ parser.add_argument("filename", type=str,
                     help="the (preferably absolute) filename of the file to be uploaded")
 parser.add_argument("-i", "--folder-id", default=settings.DRIVE_BACKUP_FOLDER_ID, type=str,
                     help="the ID of the Google Drive folder that the file should be uploaded to")
+parser.add_argument("-p", "--no-prefix", action='store_true',
+                    help="won't prefix the uploaded file's name with a timestamped string")
 args = parser.parse_args()
 
 original_name = args.filename
 drive_folder_id = args.folder_id
+no_prefix = args.no_prefix
 
 # --- Initialize some variables ---
-backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
+if no_prefix:
+    backup_name = original_name
+else:
+    backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
 mimetype, _encoding = mimetypes.guess_type(backup_name)
 
 socket.setdefaulttimeout(settings.SOCKET_DEFAULT_TIMEOUT)
