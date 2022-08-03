@@ -45,12 +45,20 @@ service = build('drive', 'v3', credentials=creds)
 logger.info(f"Uploading '{original_name}' to Drive with the filename '{backup_name}'")
 # Code based on https://developers.google.com/drive/api/guides/folder#create_a_file_in_a_folder
 media = MediaFileUpload(original_name, mimetype=mimetype)
-service.files().create(
-    body={
-        'parents': [settings.DRIVE_BACKUP_FOLDER_ID],
-        'name': backup_name,
-    },
-    media_body=media,
-    supportsAllDrives=True,
-).execute()
+for i in range(settings.NUM_UPLOAD_RETRIES):
+    try:
+        service.files().create(
+            body={
+                'parents': [settings.DRIVE_BACKUP_FOLDER_ID],
+                'name': backup_name,
+            },
+            media_body=media,
+            supportsAllDrives=True,
+        ).execute()
+        break
+    except socket.timeout as e:
+        # Let the exception crash the program if this is the last iteration
+        if i == settings.NUM_UPLOAD_RETRIES - 1:
+            raise e
+
 logger.info("Backup finished.")
