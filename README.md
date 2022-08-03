@@ -10,3 +10,6 @@ Run the following command to upload `<filename>` to the previously specified fol
 ```bash
 python backup_to_drive.py <filename>
 ```
+
+#### Options:
+* `-i <Google Drive folder ID>` - defaults to `DRIVE_BACKUP_FOLDER_ID`

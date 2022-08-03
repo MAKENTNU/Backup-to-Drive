@@ -1,10 +1,9 @@
+import argparse
 import mimetypes
 import socket
-import sys
 from datetime import datetime
 from json import JSONDecodeError
-from pathlib import Path
-from sys import argv, exit
+from sys import exit
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -15,12 +14,15 @@ from util.logging_utils import logger
 
 
 # --- Parse command line arguments ---
-if len(argv) != 2:
-    python_command = Path(sys.executable).name if sys.executable else "<Python command>"
-    logger.error(f"Usage: {python_command} backup_to_drive.py <filename>")
-    exit(1)
+parser = argparse.ArgumentParser(description="Backup a file to a Google Drive folder.")
+parser.add_argument("filename", type=str,
+                    help="the (preferably absolute) filename of the file to be uploaded")
+parser.add_argument("-i", "--folder-id", default=settings.DRIVE_BACKUP_FOLDER_ID, type=str,
+                    help="the ID of the Google Drive folder that the file should be uploaded to")
+args = parser.parse_args()
 
-original_name = argv[1]
+original_name = args.filename
+drive_folder_id = args.folder_id
 
 # --- Initialize some variables ---
 backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
@@ -42,14 +44,14 @@ except (FileNotFoundError, JSONDecodeError, ValueError) as e:
 service = build('drive', 'v3', credentials=creds)
 
 # --- Upload the file ---
-logger.info(f"Uploading '{original_name}' to Drive with the filename '{backup_name}'")
+logger.info(f"Uploading '{original_name}' to Drive (folder ID: '{drive_folder_id}') with the filename '{backup_name}'")
 # Code based on https://developers.google.com/drive/api/guides/folder#create_a_file_in_a_folder
 media = MediaFileUpload(original_name, mimetype=mimetype)
 for i in range(settings.NUM_UPLOAD_RETRIES):
     try:
         service.files().create(
             body={
-                'parents': [settings.DRIVE_BACKUP_FOLDER_ID],
+                'parents': [drive_folder_id],
                 'name': backup_name,
             },
             media_body=media,
