@@ -31,7 +31,8 @@ no_prefix = args.no_prefix
 if no_prefix:
     backup_name = original_name
 else:
-    backup_name = f'backup_{datetime.now().strftime("%Y-%m-%d_%Hh_%Mm")}.{original_name}'
+    now = datetime.now().replace(microsecond=0)
+    backup_name = f"backup_{now.isoformat()}_{original_name}"
 mimetype, _encoding = mimetypes.guess_type(backup_name)
 
 socket.setdefaulttimeout(settings.SOCKET_DEFAULT_TIMEOUT)
