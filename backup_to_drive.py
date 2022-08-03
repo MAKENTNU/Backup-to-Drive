@@ -56,18 +56,18 @@ logger.info(f"Uploading '{original_name}' to Drive (folder ID: '{drive_folder_id
 media = MediaFileUpload(original_name, mimetype=mimetype)
 for i in range(settings.NUM_UPLOAD_RETRIES):
     try:
-        service.files().create(
+        uploaded_file = service.files().create(
             body={
                 'parents': [drive_folder_id],
                 'name': backup_name,
             },
             media_body=media,
             supportsAllDrives=True,
+            fields='webViewLink',
         ).execute()
+        logger.info(f"Backup finished! View the file at {uploaded_file.get('webViewLink')}")
         break
     except socket.timeout as e:
         # Let the exception crash the program if this is the last iteration
         if i == settings.NUM_UPLOAD_RETRIES - 1:
             raise e
-
-logger.info("Backup finished.")
