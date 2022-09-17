@@ -14,3 +14,16 @@ python backup_to_drive.py <filename>
 #### Options:
 * `-i <Google Drive folder ID>` - defaults to `DRIVE_BACKUP_FOLDER_ID`
 * `-p` (no <u>p</u>refix) - prevents prefixing a timestamped string to the uploaded file's name
+
+#### As a Bash script:
+*Requires having set the `python3` command to a version of Python >= 3.7.*
+
+It's possible to use [the provided bash script](/backup-to-drive.sh), which can be installed using the following command:
+```bash
+sudo ln -s <full path to this repo locally>/backup-to-drive.sh /bin/backup-to-drive
+```
+
+After that, it can be used in the following manner (with same options as above):
+```bash
+backup-to-drive <filename>
+```
