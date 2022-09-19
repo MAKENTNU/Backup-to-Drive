@@ -25,5 +25,6 @@ if [[ $num_args -ne 1 ]]; then
     exit 1
 fi
 
-cd "$(dirname "$0")"
+# Change to the directory containing this file, resolving symlinks (code from https://stackoverflow.com/a/51651602)
+cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 sudo python3 ./backup_to_drive.py "$@"
