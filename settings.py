@@ -5,7 +5,7 @@ GOOGLE_API_SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
 CREDENTIALS_FILENAME = 'credentials.json'
 
-DRIVE_BACKUP_FOLDER_ID = 'xxxxxxxxxxxxxxxxxxx'
+DRIVE_BACKUP_FOLDER_ID: str
 
 SOCKET_DEFAULT_TIMEOUT = 5 * 60
 NUM_UPLOAD_RETRIES = 3
