@@ -1,12 +1,13 @@
 # Backup-to-Drive
 
-### Usage:
+### Setup
 Start by [creating a service account for your Google Cloud project](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount).
 
 Create a `local_settings.py` file in the same folder as [`settings.py`](/settings.py),
 and define a `DRIVE_BACKUP_FOLDER_ID` variable with the ID of the Google Drive folder you want to upload to as value.
 (Alternatively, this ID can be provided using the `-i` option described below.)
 
+### Usage
 Run the following command to upload `<filename>` to the previously specified folder:
 ```bash
 python backup_to_drive.py <filename>
