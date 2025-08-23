@@ -1,0 +1,44 @@
+---
+name: CI
+
+on: [push]
+
+jobs:
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+
+    # Code based on https://docs.astral.sh/uv/guides/integration/github/
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Set `UV_PROJECT_ENVIRONMENT` envvar
+        # Install packages into the system environment instead of a `.venv/`.
+        # (`pythonLocation` is from `actions/setup-python` - see
+        # https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#environment-variables)
+        run: echo "UV_PROJECT_ENVIRONMENT=$pythonLocation" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      # Code based on https://pre-commit.com/#github-actions-example
+      - name: Set `PY` envvar
+        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+      - name: Cache installed pre-commit hooks
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Run pre-commit hooks
+        run: make lint
