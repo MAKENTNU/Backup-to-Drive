@@ -21,6 +21,17 @@
    uv sync --group dev
    ```
 
+1. To be able to run commands in the `Makefile`:
+   * If using Windows:
+     * Ensure that you have a program installed that can run makefiles.
+       This can be done by e.g. installing
+       [GnuWin's Make](https://gnuwin32.sourceforge.net/packages/make.htm) using
+       [WinGet](https://learn.microsoft.com/en-us/windows/package-manager/winget/):
+       ```bash
+       winget install GnuWin32.Make
+       ```
+   * If using Linux/macOS: You don't need to do anything.
+
 
 ## 🚀 Usage
 
@@ -46,5 +57,5 @@ run like:
 
 Run:
 ```bash
-pre-commit run --all-files
+make lint
 ```
