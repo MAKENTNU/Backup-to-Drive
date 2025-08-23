@@ -5,9 +5,13 @@
 1. Start by
    [creating a service account for your Google Cloud project](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount).
 
-1. Create a `local_settings.py` file in the same folder as [`settings.py`](/settings.py),
-   and define a `DRIVE_BACKUP_FOLDER_ID` variable with the ID of the Google Drive folder
-   you want to upload to as value.
+1. Create a `.env` file in the same folder as this README, and paste in the following
+   contents:
+   ```dotenv
+   DRIVE_BACKUP_FOLDER_ID='<folder ID>'
+   ```
+   where `<folder ID>` is replaced with the ID of the Google Drive folder you want to
+   upload to.
    (Alternatively, this ID can be provided using the `-i` option described below.)
 
 1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
