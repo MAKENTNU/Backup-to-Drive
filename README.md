@@ -12,9 +12,9 @@
 
 1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-1. Install dependencies:
+1. Install dev dependencies:
    ```bash
-   uv sync
+   uv sync --group dev
    ```
 
 
@@ -36,3 +36,11 @@ run like:
 * `-i, --folder-id <Google Drive folder ID>` - defaults to `DRIVE_BACKUP_FOLDER_ID`
 * `-p, --no-prefix` - prevents prefixing a timestamped string to the uploaded file's
   name
+
+
+## 🧹 Linting
+
+Run:
+```bash
+pre-commit run --all-files
+```

@@ -14,5 +14,17 @@ dependencies = [
   "google-auth-oauthlib~=1.2",
 ]
 
+[dependency-groups]
+dev = [
+  "pre-commit~=4.3",
+]
+
 [tool.setuptools]
 py-modules = [  ]
+
+[tool.uv]
+# Don't install `dev` by default (see
+# https://docs.astral.sh/uv/concepts/projects/dependencies/#default-groups), to make it
+# easier to *not* install those dependencies when running the main script in a prod
+# environment
+default-groups = [  ]

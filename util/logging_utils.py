@@ -1,8 +1,9 @@
 import logging.config
+from typing import Final
 
 import settings
 
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 
-logger = logging.getLogger(__name__)
+logger: Final = logging.getLogger(__name__)
